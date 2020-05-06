@@ -16,6 +16,5 @@ class Ball:
         pygame.draw.circle(window, BLACK, (self.x,self.y),self.radius)
         pygame.draw.circle(window, self.colour, (self.x,self.y),self.radius-3)
 
-
-
-
+    def ballPath(startX, startY, ang, time):
+        pass
