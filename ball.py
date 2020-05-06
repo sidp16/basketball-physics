@@ -12,9 +12,7 @@ class Ball:
     def __repr__(self):
         return f"{self.radius} at {self.x}, {self.y}"
 
+
     def draw(self,window):
         pygame.draw.circle(window, BLACK, (self.x,self.y),self.radius)
         pygame.draw.circle(window, self.colour, (self.x,self.y),self.radius-3)
-
-    def ballPath(startX, startY, ang, time):
-        pass
