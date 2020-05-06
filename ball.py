@@ -14,5 +14,6 @@ class Ball:
 
 
     def draw(self,window):
-        pygame.draw.circle(window, BLACK, (self.x,self.y),self.radius)
-        pygame.draw.circle(window, self.colour, (self.x,self.y),self.radius-3)
+        x,y = int(self.x), int(self.y)
+        pygame.draw.circle(window, BLACK, (x,y),self.radius)
+        pygame.draw.circle(window, self.colour, (x,y),self.radius-3)
