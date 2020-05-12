@@ -1,14 +1,19 @@
 import pygame
 
 from colours import BLACK
+from config import display_height
 
 
 class Ball:
-    def __init__(self, x, y, radius, colour):
+    def __init__(self, x, y, radius, colour, bounciness):
         self.x = x
         self.y = y
         self.radius = radius
         self.colour = colour
+        self.bounce = bounciness
+        self.velocity = 0
+        self.acceleration = 9.8
+
 
     def __repr__(self):
         return f"{self.radius} at {self.x}, {self.y}"
@@ -18,33 +23,18 @@ class Ball:
         pygame.draw.circle(window, BLACK, (x, y), self.radius)
         pygame.draw.circle(window, self.colour, (x, y), self.radius - 4)
 
-    def update(self, velocity, acceleration, bounce, display_height, gameDisplay):
-        self.velocity = velocity
-        self.acceleration = acceleration
-        self.bounce = bounce
-        self.display_height = display_height
-        clock = pygame.time.Clock()
+    def TouchingFloor_Check(self):
+        return self.y >= display_height - self.radius
 
-        while True:
-            while self.y < display_height - self.radius:
-                self.y = min(self.y + velocity, display_height - self.radius)
-                velocity += acceleration
-                gameDisplay.fill((64, 64, 64))
-                self.draw(gameDisplay)
-                clock.tick(60)
-                pygame.display.update()
-                print(f"speed: {velocity} | pos: {self.y} | going down")
+    def update(self, dit):
+        print(self.velocity, self.TouchingFloor_Check())
+        if self.TouchingFloor_Check():
+            if abs(self.velocity) <  2.15:
+                self.velocity = 0
+            else:
+                self.velocity = -self.velocity * self.bounce
+                self.y = min(self.y + self.velocity * dit, display_height - self.radius)
 
-            velocity = -velocity * bounce
-            if abs(velocity) < 2.15:
-                continue
-
-            while velocity < 0:
-                print(f"speed: {velocity} | pos: {self.y} | going up")
-                self.y += velocity
-                velocity += acceleration
-                gameDisplay.fill((64, 64, 64))
-                self.draw(gameDisplay)
-                clock.tick(60)
-                pygame.display.update()
-
+        else:
+            self.velocity += self.acceleration * dit
+            self.y = min(self.y + self.velocity * dit, display_height - self.radius)
