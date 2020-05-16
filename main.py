@@ -9,6 +9,7 @@ def clearScreen():
 
 
 pygame.init()
+
 clock = pygame.time.Clock()
 bounce = 0.5 ** 0.5
 
@@ -16,15 +17,18 @@ gameDisplay = pygame.display.set_mode((display_width, display_height))
 pygame.display.set_caption("Ball Physics Simulation")
 
 clearScreen()
-basketball = Ball(x=400, y=564, radius=35, colour=ORANGE, bounciness=bounce)
+basketball = Ball(x=400, y=300, radius=35, colour=ORANGE, bounciness=bounce)
 basketball.draw(gameDisplay)
-basketball.addForce(30)
+#basketball.addForce(50)
 
 while True:
     for event in pygame.event.get():
-        if event.type == pygame.QUIT:   
+        if event.type == pygame.QUIT:
             pygame.quit()
             quit()
+        if event.type == pygame.KEYDOWN:
+            basketball.addForce(-200)
+
     dt = clock.tick(60)
     basketball.update(dt / 100)
     clearScreen()

@@ -14,7 +14,6 @@ class Ball:
         self.velocity = 0
         self.acceleration = 9.8
         self.mass = 2
-        self.weight = 0
 
     def __repr__(self):
         return f"{self.radius} at {self.x}, {self.y}"
@@ -33,9 +32,9 @@ class Ball:
             if abs(self.velocity) < 3.3:
                 self.velocity = 0
             else:
-                self.acceleration = 9.8
                 self.velocity = -self.velocity * self.bounce
                 self.y = min(self.y + self.velocity * dt, display_height - self.radius)
+                self.acceleration = 9.8
 
         else:
             self.velocity += self.acceleration * dt
@@ -47,8 +46,9 @@ class Ball:
         # w = mg
         # Fr = Ef + g
         # Fr / m = a
+        print("add force was exectued")
 
-        self.weight = self.mass * 9.8
-        resultant_force = externalForce + self.weight
+        weight = self.mass * 9.8
+        resultant_force = externalForce + weight
         self.acceleration = resultant_force / self.mass
-
+        #print(self.acceleration)
