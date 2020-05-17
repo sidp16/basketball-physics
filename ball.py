@@ -28,6 +28,10 @@ class Ball:
 
     def update(self, dt):
         # print(self.velocity, self.isTouchingFloor())
+        self.velocity += self.acceleration * dt
+        self.y = min(self.y + self.velocity * dt, display_height - self.radius)
+        self.acceleration = 9.8
+
         if self.isTouchingFloor():
             if abs(self.velocity) < 3.3:
                 self.velocity = 0
@@ -36,19 +40,12 @@ class Ball:
                 self.y = min(self.y + self.velocity * dt, display_height - self.radius)
                 self.acceleration = 9.8
 
-        else:
-            self.velocity += self.acceleration * dt
-            self.y = min(self.y + self.velocity * dt, display_height - self.radius)
-        self.acceleration = 9.8
-
     def addForce(self, externalForce):
         # f = ma
         # w = mg
         # Fr = Ef + g
         # Fr / m = a
-        print("add force was exectued")
 
         weight = self.mass * 9.8
         resultant_force = externalForce + weight
         self.acceleration = resultant_force / self.mass
-        #print(self.acceleration)

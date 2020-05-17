@@ -17,9 +17,9 @@ gameDisplay = pygame.display.set_mode((display_width, display_height))
 pygame.display.set_caption("Ball Physics Simulation")
 
 clearScreen()
-basketball = Ball(x=400, y=300, radius=35, colour=ORANGE, bounciness=bounce)
+basketball = Ball(x=450, y=150, radius=35, colour=ORANGE, bounciness=bounce)
 basketball.draw(gameDisplay)
-#basketball.addForce(50)
+# basketball.addForce(50)
 
 while True:
     for event in pygame.event.get():
@@ -27,7 +27,7 @@ while True:
             pygame.quit()
             quit()
         if event.type == pygame.KEYDOWN:
-            basketball.addForce(-200)
+            basketball.addForce(-400)
 
     dt = clock.tick(60)
     basketball.update(dt / 100)
