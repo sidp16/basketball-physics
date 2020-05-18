@@ -1,4 +1,2 @@
-display_width = 900
-display_height = 700
-acceleration = 9.8
-velocity = 0
+DISPLAY_WIDTH = 1650
+DISPLAY_HEIGHT = 600

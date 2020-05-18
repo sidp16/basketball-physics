@@ -1,7 +1,7 @@
 import pygame
 
 from colours import BLACK
-from config import display_height
+from config import DISPLAY_HEIGHT, DISPLAY_WIDTH
 
 
 class Ball:
@@ -11,8 +11,10 @@ class Ball:
         self.radius = radius
         self.colour = colour
         self.bounce = bounciness
-        self.velocity = 0
-        self.acceleration = 9.8
+        self.vY = 0
+        self.aY = 9.8
+        self.vX = 0
+        self.aX = 0
         self.mass = 2
 
     def __repr__(self):
@@ -21,31 +23,39 @@ class Ball:
     def draw(self, window):
         x, y = int(self.x), int(self.y)
         pygame.draw.circle(window, BLACK, (x, y), self.radius)
-        pygame.draw.circle(window, self.colour, (x, y), self.radius - 4)
+        pygame.draw.circle(window, self.colour, (x, y), self.radius - 2)
 
     def isTouchingFloor(self):
-        return self.y >= display_height - self.radius
+        return self.y >= DISPLAY_HEIGHT - self.radius or self.y <= 0 + self.radius
 
-    def update(self, dt):
-        # print(self.velocity, self.isTouchingFloor())
-        self.velocity += self.acceleration * dt
-        self.y = min(self.y + self.velocity * dt, display_height - self.radius)
-        self.acceleration = 9.8
+    def isTouchingSide(self):
+        return self.x >= DISPLAY_WIDTH - self.radius or self.x <= 0 + self.radius
 
-        if self.isTouchingFloor():
-            if abs(self.velocity) < 3.5:
-                self.velocity = 0
-            else:
-                self.velocity = -self.velocity * self.bounce
-                self.y = min(self.y + self.velocity * dt, display_height - self.radius)
-                self.acceleration = 9.8
-
-    def addForce(self, externalForce):
-        # f = ma
-        # w = mg
-        # Fr = Ef + g
-        # Fr / m = a
-
+    def addForceY(self, externalForce):
         weight = self.mass * 9.8
         resultant_force = externalForce + weight
-        self.acceleration = resultant_force / self.mass
+        self.aY = resultant_force / self.mass
+
+    def addForceX(self, externalForce):
+        self.aX = externalForce / self.mass
+
+    def update(self, dt):
+        self.vY += self.aY * dt
+        self.y = min(self.y + self.vY * dt, DISPLAY_HEIGHT - self.radius)
+        self.aY = 9.8
+
+        self.vX += self.aX * dt
+        self.x += self.vX * dt
+        self.aX = 0
+
+        if self.isTouchingFloor():
+            if abs(self.vY) < 3.5:
+                self.vY = 0
+            else:
+                self.vY = -self.vY * self.bounce
+                self.y = min(self.y + self.vY * dt, DISPLAY_HEIGHT - self.radius)
+                self.aY = 9.8
+
+        if self.isTouchingSide():
+            self.vX = -self.vX * self.bounce
+            self.x = min(self.x + self.vX * dt, DISPLAY_WIDTH - self.radius)
