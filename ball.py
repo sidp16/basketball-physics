@@ -33,7 +33,7 @@ class Ball:
         self.acceleration = 9.8
 
         if self.isTouchingFloor():
-            if abs(self.velocity) < 3.3:
+            if abs(self.velocity) < 3.5:
                 self.velocity = 0
             else:
                 self.velocity = -self.velocity * self.bounce
