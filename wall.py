@@ -1,0 +1,1 @@
+# New function for the 'wall' object and class
