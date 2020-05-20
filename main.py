@@ -6,7 +6,7 @@ from colours import ORANGE
 from config import DISPLAY_WIDTH, DISPLAY_HEIGHT
 
 def clearScreen():
-    gameDisplay.fill((255, 255, 255))
+    gameDisplay.fill((236,240,241))
 
 pygame.init()
 bounce = 0.5 ** 0.5
@@ -35,7 +35,7 @@ while True:
             if event.key == pygame.K_RIGHT:
                 basketball.addForce(x=350)
             if event.key == pygame.K_SPACE:
-                shootBall(basketball, 3000, int(45))
+                shootBall(basketball, 5000, 45)
 
     dt = clock.tick(60) # in ms, e.g 2500ms is 2.5s (diff in time since last iteration)
     factor = 0.5/100
