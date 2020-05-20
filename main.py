@@ -1,28 +1,34 @@
+from math import degrees, sin, cos
+
 import pygame
 from ball import Ball
 from colours import ORANGE
 from config import DISPLAY_WIDTH, DISPLAY_HEIGHT
 
 def clearScreen():
-    gameDisplay.fill((255,255,255))
+    gameDisplay.fill((255, 255, 255))
 
 # force in newtons, angle in degrees
-def shootBall(ball, force, angle):
-    pass
+def shootBall(ball, totalForce, angle):
+    print(f"Angle:  {angle}")
+    y_force = sin(angle) * totalForce
+    x_force = cos(angle) * totalForce
+    print(f"X force: {x_force}, Y force: {y_force}")
+    ball.addForce(x_force, y_force)
+
 
 pygame.init()
-clock = pygame.time.Clock()
 bounce = 0.5 ** 0.5
 
 gameDisplay = pygame.display.set_mode((DISPLAY_WIDTH, DISPLAY_HEIGHT))
 pygame.display.set_caption("Ball Physics Simulation")
 clearScreen()
 
-basketball = Ball(x=100, y=DISPLAY_HEIGHT-20, radius=20, colour=ORANGE, bounciness=bounce)
+basketball = Ball(x=832, y=680, radius=20, colour=ORANGE, bounciness=bounce)
 basketball.draw(gameDisplay)
-basketball.addForceX(+100)
-# timePassed = 0
+clock = pygame.time.Clock()
 
+shootBall(basketball,500,70)
 while True:
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
@@ -30,24 +36,19 @@ while True:
             quit()
         if event.type == pygame.KEYDOWN:
             if event.key == pygame.K_UP:
-                basketball.addForceY(-200)
+                basketball.addForce(y=-350)
             if event.key == pygame.K_DOWN:
-                basketball.addForceY(+200)
+                basketball.addForce(y=350)
             if event.key == pygame.K_LEFT:
-                basketball.addForceX(-200)
+                basketball.addForce(x=-350)
             if event.key == pygame.K_RIGHT:
-                basketball.addForceX(+200)
+                basketball.addForce(x=350)
             if event.key == pygame.K_SPACE:
-                basketball.addForceY(-500)
+                basketball.addForce(y=-2000)
+
 
     dt = clock.tick(60) # in ms, e.g 2500ms is 2.5s (diff in time since last iteration)
-
-    # timePassed += dt
-    # if timePassed > 1000:
-    #     print(f"{timePassed} - {display_height - basketball.y:.2f}m at {basketball.velocity:.2f}m/s")
-    #     timePassed = 0
-
-    factor = 1/100
+    factor = 0.5/100
     basketball.update(dt * factor)
     clearScreen()
     basketball.draw(gameDisplay)

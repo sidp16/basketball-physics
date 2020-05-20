@@ -31,13 +31,15 @@ class Ball:
     def isTouchingSide(self):
         return self.x >= DISPLAY_WIDTH - self.radius or self.x <= 0 + self.radius
 
-    def addForceY(self, externalForce):
-        weight = self.mass * 9.8
-        resultant_force = externalForce + weight
-        self.aY = resultant_force / self.mass
+    def addForce(self, x=0, y=0):
+        if x:
+            self.aX = x / self.mass
 
-    def addForceX(self, externalForce):
-        self.aX = externalForce / self.mass
+        if y:
+            weight = self.mass * 9.8
+            resultant_force = y + weight
+
+            self.aY = resultant_force / self.mass
 
     def update(self, dt):
         self.vY += self.aY * dt
@@ -46,6 +48,7 @@ class Ball:
 
         self.vX += self.aX * dt
         self.x += self.vX * dt
+        # print(f"Velocity X: {self.vX:.2f}, X coord:, {self.x:.2f}")
         self.aX = 0
 
         if self.isTouchingFloor():
