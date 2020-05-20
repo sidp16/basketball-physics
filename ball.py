@@ -15,7 +15,7 @@ class Ball:
         self.aY = 9.8
         self.vX = 0
         self.aX = 0
-        self.mass = 2
+        self.mass = 5
 
     def __repr__(self):
         return f"{self.radius} at {self.x}, {self.y}"
@@ -23,7 +23,7 @@ class Ball:
     def draw(self, window):
         x, y = int(self.x), int(self.y)
         pygame.draw.circle(window, BLACK, (x, y), self.radius)
-        pygame.draw.circle(window, self.colour, (x, y), self.radius - 2)
+        pygame.draw.circle(window, self.colour, (x, y), self.radius - 1)
 
     def isTouchingFloor(self):
         return self.y >= DISPLAY_HEIGHT - self.radius or self.y <= 0 + self.radius
