@@ -2,15 +2,15 @@ import pygame
 
 from actions import shootBall
 from ball import Ball
-from colours import ORANGE
+from colours import RED
 from config import DISPLAY_WIDTH, DISPLAY_HEIGHT
-from gameObjects import walls
+from gameObjects import wall
 
 
 def clearScreen():
     gameDisplay.fill((236,240,241))
 
-basketball = Ball(x=1000, y=680, radius=18, colour=ORANGE, bounciness=0.5**0.5)
+basketball = Ball(x=1000, y=680, radius=18, colour=RED, bounciness=0.5**0.5)
 clock = pygame.time.Clock()
 pygame.init()
 
@@ -19,8 +19,7 @@ pygame.display.set_caption("Ball Physics Simulation")
 clearScreen()
 
 basketball.draw(gameDisplay)
-for w in walls:
-    w.draw(gameDisplay)
+wall.draw(gameDisplay)
 
 while True:
     for event in pygame.event.get():
@@ -44,6 +43,5 @@ while True:
     basketball.update(dt * factor)
     clearScreen()
     basketball.draw(gameDisplay)
-    for w in walls:
-        w.draw(gameDisplay)
+    wall.draw(gameDisplay)
     pygame.display.update()

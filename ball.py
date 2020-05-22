@@ -1,10 +1,9 @@
-import sys
-from math import sqrt, cos, degrees, acos, sin
 import pygame
+from math import sqrt, degrees, acos, sin
 
 from colours import BLACK, RED, ORANGE, GREEN
 from config import DISPLAY_HEIGHT, DISPLAY_WIDTH
-from gameObjects import walls
+from gameObjects import wall
 
 
 class Ball:
@@ -39,25 +38,24 @@ class Ball:
         distT = sqrt((self.x - wall.startPos[0])**2 + (self.y - wall.startPos[1])**2)
         distB = sqrt((self.x - wall.endPos[0])**2 + (self.y - wall.endPos[1])**2)
 
-        # ( b^2 + c^2 - a^2 ) / (2 * b * c)
+        # ( b^2 + c^2 - a^2 ) / (2 * b * c) > cosine rule
         top = ((distT**2) + (length**2) - (distB**2)) / (2*distT*length)
         bottom = ((distB**2) + (length**2) - (distT**2)) / (2*distB*length)
 
         angT = acos(top)
         angB = acos(bottom)
 
-        print(f"top: {top:4.2f}, bottom: {bottom:4.2f}, t: {degrees(angT):4.2f}, b: {degrees(angB): 4.2f}")
+        # print(f"top: {top:4.2f}, bottom: {bottom:4.2f}, t: {degrees(angT):4.2f}, b: {degrees(angB): 4.2f}")
 
         if degrees(angT) <= 90 and degrees(angB) <= 90:
-            self.colour = ORANGE
             distP = distT * sin(angT)
+            print(f"distP: {distP:4.2f}, t: {degrees(angT):4.2f}, b: {degrees(angB): 4.2f}")
+            self.colour = ORANGE
             return distP <= self.radius
         else:
             self.colour = RED
             return False
-
         # print(f"dT: {distT:4.2f}, dB: {distB:4.2f}")
-
 
     def addForce(self, x=0, y=0):
         if x:
@@ -91,11 +89,7 @@ class Ball:
             self.vX = -self.vX * self.bounce
             self.x = min(self.x + self.vX * dt, DISPLAY_WIDTH - self.radius)
 
-        for w in walls:
-            if self.isTouchingWall( w):
-                self.vX = -self.vX * self.bounce
-                self.vY = -self.vY * self.bounce
-                self.colour = GREEN
-                break
-            else:
-                self.colour = RED
+        if self.isTouchingWall(wall):
+            self.colour = GREEN
+            # self.vX = -self.vX * self.bounce
+            # self.vY = -self.vY * self.bounce
