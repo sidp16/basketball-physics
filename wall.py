@@ -1,6 +1,6 @@
 import pygame
 
-from colours import RED, BLACK
+from colours import BLACK
 
 
 class Wall:
@@ -14,3 +14,4 @@ class Wall:
         # start, end = int(self.start), int(self.end)
         pygame.draw.line(window, BLACK, self.startPos, self.endPos, self.width)
         pygame.draw.line(window, self.colour, self.startPos, self.endPos, self.width-10)
+
