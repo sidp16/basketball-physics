@@ -4,7 +4,7 @@ from actions import shootBall
 from ball import Ball
 from colours import RED
 from config import DISPLAY_WIDTH, DISPLAY_HEIGHT
-from gameObjects import wall
+from gameObjects import walls
 
 
 def clearScreen():
@@ -19,7 +19,8 @@ pygame.display.set_caption("Ball Physics Simulation")
 clearScreen()
 
 basketball.draw(gameDisplay)
-wall.draw(gameDisplay)
+for w in walls:
+    w.draw(gameDisplay)
 
 while True:
     for event in pygame.event.get():
@@ -43,5 +44,6 @@ while True:
     basketball.update(dt * factor)
     clearScreen()
     basketball.draw(gameDisplay)
-    wall.draw(gameDisplay)
+    for w in walls:
+        w.draw(gameDisplay)
     pygame.display.update()

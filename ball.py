@@ -3,7 +3,7 @@ from math import sqrt, degrees, acos, sin
 
 from colours import BLACK, RED, ORANGE, GREEN
 from config import DISPLAY_HEIGHT, DISPLAY_WIDTH
-from gameObjects import wall
+from gameObjects import walls
 
 
 class Ball:
@@ -89,7 +89,9 @@ class Ball:
             self.vX = -self.vX * self.bounce
             self.x = min(self.x + self.vX * dt, DISPLAY_WIDTH - self.radius)
 
-        if self.isTouchingWall(wall):
-            self.colour = GREEN
-            # self.vX = -self.vX * self.bounce
-            # self.vY = -self.vY * self.bounce
+        for w in walls:
+            if self.isTouchingWall(w):
+                self.colour = GREEN
+                break
+                # self.vX = -self.vX * self.bounce
+                # self.vY = -self.vY * self.bounce
