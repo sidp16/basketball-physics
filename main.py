@@ -39,8 +39,8 @@ while True:
             if event.key == pygame.K_SPACE:
                 shootBall(basketball, 10000, 90)
 
-    dt = clock.tick(60) # in ms, e.g 2500ms is 2.5s (diff in time since last iteration)
-    factor = 0.5/100
+    dt = clock.tick(90) # in ms, e.g 2500ms is 2.5s (diff in time since last iteration)
+    factor = 0.75/100
     basketball.update(dt * factor)
     clearScreen()
     basketball.draw(gameDisplay)
