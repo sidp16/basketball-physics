@@ -9,8 +9,6 @@ from gameObjects import walls
 
 class Ball:
     def __init__(self, x, y, radius, colour, bounciness):
-        # self.x = x
-        # self.y = y
         self.position = Vector(x, y)
         self.acceleration = Vector(0, 9.8)
         self.velocity = Vector(0,0)
@@ -18,11 +16,6 @@ class Ball:
         self.radius = radius
         self.colour = colour
         self.bounce = bounciness
-
-        # self.vY = 0
-        # self.aY = 9.8
-        # self.vX = 0
-        # self.aX = 0
 
     def __repr__(self):
         return f"{self.radius} at {self.position}, {self.position.x}"
@@ -57,7 +50,7 @@ class Ball:
             # print(f"distP: {distP:4.2f}, t: {degrees(angT):4.2f}, b: {degrees(angB): 4.2f}")
             self.colour = ORANGE
             if distP <= self.radius:
-                self.resetPosition(wall)
+                self.resetPosition(wall, distB, distP)
                 return True
         else:
             self.colour = RED
@@ -73,26 +66,28 @@ class Ball:
 
             self.acceleration.y = resultant_force / self.mass
 
-    def resetPosition(self, wall):
+    def resetPosition(self, wall, distB, distP):
         # c^2 = a^2 + b^2 - 2ab * cos(C) > cosine rule (side)
-        # angP = acos(distP / distB)
-        # distX = (distB ** 2) + (distP ** 2) - (2 * distB * distP) * cos(angP)
-        # ratio = distX / length
-        # return distX
-        pass
+        angP = acos(distP / distB)
+        distX = (distB ** 2) + (distP ** 2) - (2 * distB * distP) * cos(angP)
+        direction = Vector(wall.startPos[0] - wall.endPos[0], wall.startPos[1] - wall.endPos[1])
+        length = direction.magnitude()
+        unitLength1 = direction / length
+        impactPoint = wall.endPos + (distX * unitLength1)
+        print(impactPoint)
 
     def update(self, dt):
         # print(f"x: {self.position.x}, y: {self.position.y}")
         # print(f"velX: {self.velocity.x}, velY: {self.position.y}")
-        self.velocity.y += self.acceleration.y * dt
-        self.velocity.x += self.acceleration.x * dt
 
-        self.position.y = min(self.position.y + self.velocity.y * dt, DISPLAY_HEIGHT - self.radius)
-        self.acceleration.y = 9.8
+        self.velocity += self.acceleration * dt
 
-        self.position.x += self.velocity.x * dt
-        self.acceleration.x = 0
+        self.position += self.velocity * dt
+        self.position.y = min(self.position.y, DISPLAY_HEIGHT - self.radius) # ball doesn't go through floor
 
+        self.acceleration = Vector(0, 9.8)
+
+        # print(f"speed: {self.velocity.mag():4.2f}")
         # print(f"Velocity X: {self.velocity.x:.2f}, X coord:, {self.position.x:.2f}")
 
         if self.isTouchingFloor():
@@ -101,7 +96,7 @@ class Ball:
             else:
                 self.velocity.y = -self.velocity.y * self.bounce
                 self.position.y = min(self.position.y + self.velocity.y * dt, DISPLAY_HEIGHT - self.radius)
-                self.acceleration.y = 9.8
+                self.acceleration = Vector(0, 9.8)
 
         if self.isTouchingSide():
             self.velocity.x = -self.velocity.x * self.bounce
@@ -110,6 +105,6 @@ class Ball:
         for w in walls:
             if self.isTouchingWall(w):
                 self.colour = GREEN
-                self.velocity.x = -self.velocity.x * self.bounce
-                self.velocity.y = -self.velocity.y * self.bounce
+                # self.velocity.x = -self.velocity.x * self.bounce
+                # self.velocity.y = -self.velocity.y * self.bounce
                 break

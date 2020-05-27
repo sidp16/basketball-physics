@@ -1,12 +1,13 @@
 import pygame
 
 from colours import BLACK
+from vector import Vector
 
 
 class Wall:
-    def __init__(self, startPos, endPos, colour, width):
-        self.startPos = startPos
-        self.endPos = endPos
+    def __init__(self, x, y, x2, y2, colour, width):
+        self.startPos = Vector(x, y)
+        self.endPos = Vector(x2, y2)
         self.colour = colour
         self.width = width
 

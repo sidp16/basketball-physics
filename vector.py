@@ -26,12 +26,24 @@ class Vector:
         elif isinstance(other, Vector):
             return self.x * other.x + self.y * other.y
         else:
-            raise TypeError(f"{other}, found {type(other).__name__}, expected Vector")
+            raise TypeError(f"{other}, found {type(other).__name__}, expected Vector / int / float")
+
+    def __truediv__(self, other):
+        if isinstance(other, (int, float)):
+            return Vector(self.x / other, self.y / other)
+        else:
+            raise TypeError(f"{other}, found {type(other).__name__}, expected int / float")
+
+
+    def magnitude(self):
+        return sqrt((self.x ** 2) + (self.y ** 2))
 
     def distTo(self, other):
         return sqrt(((self.x - other.x) ** 2 + (self.y - other.y) ** 2))
 
+    def angleBetween(self, other):
+        pass
 
 if __name__ == "__main__":
     point2 = Vector(3,8)
-    print(point2)
+    print(point2 / 3)
