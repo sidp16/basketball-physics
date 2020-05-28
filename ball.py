@@ -32,9 +32,9 @@ class Ball:
         return self.position.x >= DISPLAY_WIDTH - self.radius or self.position.x <= 0 + self.radius
 
     def isTouchingWall(self, wall):
-        length = sqrt((wall.startPos[0] - wall.endPos[0])**2 + (wall.startPos[1] - wall.endPos[1])**2)
-        distT = sqrt((self.position.x - wall.startPos[0])**2 + (self.position.y - wall.startPos[1])**2)
-        distB = sqrt((self.position.x - wall.endPos[0])**2 + (self.position.y - wall.endPos[1])**2)
+        length = sqrt((wall.startPos.x - wall.endPos.x)**2 + (wall.startPos.y - wall.endPos.y)**2)
+        distT = sqrt((self.position.x - wall.startPos.x)**2 + (self.position.y - wall.startPos.y)**2)
+        distB = sqrt((self.position.x - wall.endPos.x)**2 + (self.position.y - wall.endPos.y)**2)
 
         # ( b^2 + c^2 - a^2 ) / (2 * b * c) > cosine rule (angle)
         top = ((distT**2) + (length**2) - (distB**2)) / (2*distT*length)
@@ -67,14 +67,16 @@ class Ball:
             self.acceleration.y = resultant_force / self.mass
 
     def resetPosition(self, wall, distB, distP):
-        # c^2 = a^2 + b^2 - 2ab * cos(C) > cosine rule (side)
+        # a^2 = b^2 + c^2 - 2bc * cos(A) > cosine rule (side)
         angP = acos(distP / distB)
         distX = (distB ** 2) + (distP ** 2) - (2 * distB * distP) * cos(angP)
-        direction = Vector(wall.startPos[0] - wall.endPos[0], wall.startPos[1] - wall.endPos[1])
+        direction = Vector(wall.startPos.x - wall.endPos.x, wall.startPos.y - wall.endPos.y)
         length = direction.magnitude()
         unitLength1 = direction / length
-        impactPoint = wall.endPos + (distX * unitLength1)
-        print(impactPoint)
+
+        print(f"angP: {degrees(angP):4.2f}, distP: {distP:4.2f}, distB: {distB:4.2f}, distX: {distX}")
+        # print(f"direction: {direction}, length: {length}, unitLength1: {unitLength1})
+        # impactPoint = wall.endPos + (distX * unitLength1)
 
     def update(self, dt):
         # print(f"x: {self.position.x}, y: {self.position.y}")

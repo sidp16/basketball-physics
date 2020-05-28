@@ -13,6 +13,7 @@ class Wall:
 
     def draw(self, window):
         # start, end = int(self.start), int(self.end)
-        pygame.draw.line(window, BLACK, self.startPos, self.endPos, self.width)
-        pygame.draw.line(window, self.colour, self.startPos, self.endPos, self.width-10)
+
+        pygame.draw.line(window, BLACK, (self.startPos.x, self.startPos.y), (self.endPos.x, self.endPos.y), self.width)
+        pygame.draw.line(window, self.colour, (self.startPos.x, self.startPos.y), (self.endPos.x, self.endPos.y), self.width-10)
 
