@@ -29,7 +29,7 @@ while True:
             quit()
         if event.type == pygame.KEYDOWN:
             if event.key == pygame.K_UP:
-                basketball.addForce(y=-500)
+                basketball.addForce(y=-1000)
             if event.key == pygame.K_DOWN:
                 basketball.addForce(y=350)
             if event.key == pygame.K_LEFT:
@@ -39,7 +39,7 @@ while True:
             if event.key == pygame.K_SPACE:
                 shootBall(basketball, 10000, 90)
 
-    dt = clock.tick(90) # in ms, e.g 2500ms is 2.5s (diff in time since last iteration)
+    dt = clock.tick(60) # in ms, e.g 2500ms is 2.5s (diff in time since last iteration)
     factor = 0.75/100
     basketball.update(dt * factor)
     clearScreen()

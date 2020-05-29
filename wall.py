@@ -5,9 +5,9 @@ from vector import Vector
 
 
 class Wall:
-    def __init__(self, x, y, x2, y2, colour, width):
-        self.startPos = Vector(x, y)
-        self.endPos = Vector(x2, y2)
+    def __init__(self, startPos, endPos,  colour, width):
+        self.startPos = Vector(*startPos)
+        self.endPos = Vector(*endPos)
         self.colour = colour
         self.width = width
 

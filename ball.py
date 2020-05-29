@@ -67,16 +67,19 @@ class Ball:
             self.acceleration.y = resultant_force / self.mass
 
     def resetPosition(self, wall, distB, distP):
-        # a^2 = b^2 + c^2 - 2bc * cos(A) > cosine rule (side)
-        angP = acos(distP / distB)
-        distX = (distB ** 2) + (distP ** 2) - (2 * distB * distP) * cos(angP)
-        direction = Vector(wall.startPos.x - wall.endPos.x, wall.startPos.y - wall.endPos.y)
-        length = direction.magnitude()
-        unitLength1 = direction / length
+        distX = sqrt((distB ** 2) - (distP ** 2)) # pythagoras
+        directionWall = Vector(wall.startPos.x - wall.endPos.x, wall.startPos.y - wall.endPos.y)
+        unitDirectionWall = directionWall / directionWall.magnitude()
 
-        print(f"angP: {degrees(angP):4.2f}, distP: {distP:4.2f}, distB: {distB:4.2f}, distX: {distX}")
+        # print(f"angP: {degrees(angP):4.2f}, distP: {distP:4.2f}, distB: {distB:4.2f}, distX: {distX}")
         # print(f"direction: {direction}, length: {length}, unitLength1: {unitLength1})
-        # impactPoint = wall.endPos + (distX * unitLength1)
+
+        impactPoint = wall.endPos + (unitDirectionWall * distX)
+        directionPerp = Vector(-directionWall.y, directionWall.x)
+
+        unitDirectionPerp = directionPerp / directionPerp.magnitude()
+        resetPoint = impactPoint + (unitDirectionPerp * self.radius)
+        self.position = resetPoint
 
     def update(self, dt):
         # print(f"x: {self.position.x}, y: {self.position.y}")
@@ -107,6 +110,6 @@ class Ball:
         for w in walls:
             if self.isTouchingWall(w):
                 self.colour = GREEN
-                # self.velocity.x = -self.velocity.x * self.bounce
-                # self.velocity.y = -self.velocity.y * self.bounce
+                self.velocity.x = -self.velocity.x * self.bounce
+                self.velocity.y = -self.velocity.y * self.bounce
                 break

@@ -39,9 +39,13 @@ class Vector:
         return sqrt((self.x ** 2) + (self.y ** 2))
 
     def distTo(self, other):
-        return sqrt(((self.x - other.x) ** 2 + (self.y - other.y) ** 2))
+        if isinstance(other, Vector):
+            return sqrt(((self.x - other.x) ** 2 + (self.y - other.y) ** 2))
+        else:
+            raise TypeError(f"{other}, found {type(other).__name__}, expected Vector")
 
-    def angleBetween(self, other):
+
+    def angleWith(self, other):
         pass
 
 if __name__ == "__main__":
