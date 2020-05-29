@@ -2,7 +2,7 @@ import pygame
 from math import sqrt, degrees, acos, sin, cos, radians
 
 from vector import Vector
-from colours import BLACK, RED, ORANGE, GREEN
+from colours import BLACK, RED, ORANGE, GREEN, BLUE
 from config import DISPLAY_HEIGHT, DISPLAY_WIDTH
 from gameObjects import walls
 
@@ -52,6 +52,17 @@ class Ball:
             if distP <= self.radius:
                 self.resetPosition(wall, distB, distP)
                 return True
+
+        elif self.position.distTo(wall.startPos) <= self.radius:
+            unitDirectionBall =  (self.position - wall.startPos).unit()
+            self.position = wall.startPos + (unitDirectionBall * self.radius)
+            return True
+
+        elif self.position.distTo(wall.endPos) <= self.radius:
+            unitDirectionBall =  (self.position - wall.endPos).unit()
+            self.position = wall.endPos + (unitDirectionBall * self.radius)
+            return True
+
         else:
             self.colour = RED
             return False
@@ -69,19 +80,17 @@ class Ball:
     def resetPosition(self, wall, distB, distP):
         distX = sqrt((distB ** 2) - (distP ** 2)) # pythagoras
         directionWall = Vector(wall.startPos.x - wall.endPos.x, wall.startPos.y - wall.endPos.y)
-        unitDirectionWall = directionWall / directionWall.magnitude()
+        unitDirectionWall = directionWall.unit()
 
         # print(f"angP: {degrees(angP):4.2f}, distP: {distP:4.2f}, distB: {distB:4.2f}, distX: {distX}")
         # print(f"direction: {direction}, length: {length}, unitLength1: {unitLength1})
 
         impactPoint = wall.endPos + (unitDirectionWall * distX)
-        directionPerp = Vector(-directionWall.y, directionWall.x)
+        unitDirectionPerp = Vector(-directionWall.y, directionWall.x).unit()
 
-        print(directionPerp.angleWith(self.velocity))
-        if directionPerp.angleWith(self.velocity) < radians(90):
-            directionPerp = directionPerp * -1
+        if unitDirectionPerp.angleWith(self.velocity) < radians(90):
+            unitDirectionPerp = unitDirectionPerp * -1
 
-        unitDirectionPerp = directionPerp / directionPerp.magnitude()
         resetPoint = impactPoint + (unitDirectionPerp * self.radius)
         self.position = resetPoint
 
