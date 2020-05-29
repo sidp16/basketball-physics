@@ -1,4 +1,5 @@
-from math import sqrt
+from math import sqrt, acos
+
 
 class Vector:
     def __init__(self, x, y):
@@ -46,7 +47,10 @@ class Vector:
 
 
     def angleWith(self, other):
-        pass
+        if isinstance(other, Vector):
+            return acos((self * other) / (self.magnitude() * other.magnitude()))
+        else:
+            raise TypeError(f"{other}, found {type(other).__name__}, expected Vector")
 
 if __name__ == "__main__":
     point2 = Vector(3,8)

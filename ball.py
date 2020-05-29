@@ -1,5 +1,5 @@
 import pygame
-from math import sqrt, degrees, acos, sin, cos
+from math import sqrt, degrees, acos, sin, cos, radians
 
 from vector import Vector
 from colours import BLACK, RED, ORANGE, GREEN
@@ -76,6 +76,10 @@ class Ball:
 
         impactPoint = wall.endPos + (unitDirectionWall * distX)
         directionPerp = Vector(-directionWall.y, directionWall.x)
+
+        print(directionPerp.angleWith(self.velocity))
+        if directionPerp.angleWith(self.velocity) < radians(90):
+            directionPerp = directionPerp * -1
 
         unitDirectionPerp = directionPerp / directionPerp.magnitude()
         resetPoint = impactPoint + (unitDirectionPerp * self.radius)
