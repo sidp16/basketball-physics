@@ -32,9 +32,9 @@ class Ball:
         return self.position.x >= DISPLAY_WIDTH - self.radius or self.position.x <= 0 + self.radius
 
     def isTouchingWall(self, wall):
-        length = sqrt((wall.startPos.x - wall.endPos.x)**2 + (wall.startPos.y - wall.endPos.y)**2)
-        distT = sqrt((self.position.x - wall.startPos.x)**2 + (self.position.y - wall.startPos.y)**2)
-        distB = sqrt((self.position.x - wall.endPos.x)**2 + (self.position.y - wall.endPos.y)**2)
+        length = wall.startPos.distTo(wall.endPos)
+        distT = wall.startPos.distTo(self.position)
+        distB = wall.endPos.distTo(self.position)
 
         # ( b^2 + c^2 - a^2 ) / (2 * b * c) > cosine rule (angle)
         top = ((distT**2) + (length**2) - (distB**2)) / (2*distT*length)
@@ -43,14 +43,13 @@ class Ball:
         angT = acos(top)
         angB = acos(bottom)
 
-        # print(f"top: {top:4.2f}, bottom: {bottom:4.2f}, t: {degrees(angT):4.2f}, b: {degrees(angB): 4.2f}")
-
         if degrees(angT) <= 90 and degrees(angB) <= 90:
             distP = distT * sin(angT)
-            # print(f"distP: {distP:4.2f}, t: {degrees(angT):4.2f}, b: {degrees(angB): 4.2f}")
             self.colour = ORANGE
+            angle = self.velocity.angleWith(wall.startPos)
             if distP <= self.radius:
                 self.resetPosition(wall, distB, distP)
+                self.velocity.rotate(angle, self.position)
                 return True
 
         elif self.position.distTo(wall.startPos) <= self.radius:
@@ -83,7 +82,6 @@ class Ball:
         unitDirectionWall = directionWall.unit()
 
         # print(f"angP: {degrees(angP):4.2f}, distP: {distP:4.2f}, distB: {distB:4.2f}, distX: {distX}")
-        # print(f"direction: {direction}, length: {length}, unitLength1: {unitLength1})
 
         impactPoint = wall.endPos + (unitDirectionWall * distX)
         unitDirectionPerp = Vector(-directionWall.y, directionWall.x).unit()
@@ -95,18 +93,10 @@ class Ball:
         self.position = resetPoint
 
     def update(self, dt):
-        # print(f"x: {self.position.x}, y: {self.position.y}")
-        # print(f"velX: {self.velocity.x}, velY: {self.position.y}")
-
         self.velocity += self.acceleration * dt
-
         self.position += self.velocity * dt
         self.position.y = min(self.position.y, DISPLAY_HEIGHT - self.radius) # ball doesn't go through floor
-
         self.acceleration = Vector(0, 9.8)
-
-        # print(f"speed: {self.velocity.mag():4.2f}")
-        # print(f"Velocity X: {self.velocity.x:.2f}, X coord:, {self.position.x:.2f}")
 
         if self.isTouchingFloor():
             if abs(self.velocity.y) < 3.5:

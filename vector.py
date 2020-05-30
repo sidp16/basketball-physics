@@ -1,4 +1,4 @@
-from math import sqrt, acos
+from math import sqrt, acos, sin, cos
 
 
 class Vector:
@@ -52,6 +52,14 @@ class Vector:
             return acos((self * other) / (self.magnitude() * other.magnitude()))
         else:
             raise TypeError(f"{other}, found {type(other).__name__}, expected Vector")
+
+    def rotate(self, other, position):
+        if isinstance(other, (int, float)):
+            x2 = cos(other) * position.x - sin(other) * position.y
+            y2 = sin(other) * position.x + cos(other) * position.y
+            return Vector(x2,y2)
+        else:
+            raise TypeError(f"{other}, found {type(other).__name__}, expected int / float")
 
 if __name__ == "__main__":
     point2 = Vector(3,8)

@@ -8,8 +8,8 @@ from wall import Wall
 # wall3 = Wall(startPos=(50,600), endPos=(200,600), colour=PURPLE, width=1)
 
 # v wall
-wall1 = Wall((50, 200), (200,500), colour=PURPLE, width=1)
-wall2 = Wall((200, 500), (350,200), colour=PURPLE, width=1)
+wall5 = Wall((450, 200), (600,500), colour=PURPLE, width=1)
+wall6 = Wall((600, 500), (750,200), colour=PURPLE, width=1)
 
 #square
 wall1 = Wall((50, 200), (250,200), colour=PURPLE, width=1)
@@ -18,4 +18,4 @@ wall3 = Wall((250, 500), (50,500), colour=PURPLE, width=1)
 wall4 = Wall((50, 500), (50,200), colour=PURPLE, width=1)
 
 
-walls = [wall1, wall2, wall3, wall4]
+walls = [wall1, wall2, wall3, wall4, wall5, wall6]
