@@ -31,10 +31,12 @@ class Ball:
     def isTouchingSide(self):
         return self.position.x >= DISPLAY_WIDTH - self.radius or self.position.x <= 0 + self.radius
 
+
     def isTouchingWall(self, wall):
         length = wall.startPos.distTo(wall.endPos)
         distT = wall.startPos.distTo(self.position)
         distB = wall.endPos.distTo(self.position)
+        directionWall = wall.endPos - wall.startPos
 
         # ( b^2 + c^2 - a^2 ) / (2 * b * c) > cosine rule (angle)
         top = ((distT**2) + (length**2) - (distB**2)) / (2*distT*length)
@@ -46,10 +48,13 @@ class Ball:
         if degrees(angT) <= 90 and degrees(angB) <= 90:
             distP = distT * sin(angT)
             self.colour = ORANGE
-            angle = self.velocity.angleWith(wall.startPos)
+            angle = 180 - self.velocity.angleWith(directionWall)
             if distP <= self.radius:
+                print(f"angle: {degrees(angle)}")
                 self.resetPosition(wall, distB, distP)
-                self.velocity.rotate(angle, self.position)
+                print(f"beforeR: {self.velocity}")
+                self.velocity = self.velocity.rotate(angle)
+                print(f"afterR: {self.velocity}")
                 return True
 
         elif self.position.distTo(wall.startPos) <= self.radius:
@@ -66,19 +71,9 @@ class Ball:
             self.colour = RED
             return False
 
-    def addForce(self, x=0, y=0):
-        if x:
-            self.acceleration.x = x / self.mass
-
-        if y:
-            weight = self.mass * 9.8
-            resultant_force = y + weight
-
-            self.acceleration.y = resultant_force / self.mass
-
     def resetPosition(self, wall, distB, distP):
         distX = sqrt((distB ** 2) - (distP ** 2)) # pythagoras
-        directionWall = Vector(wall.startPos.x - wall.endPos.x, wall.startPos.y - wall.endPos.y)
+        directionWall = wall.endPos - wall.startPos
         unitDirectionWall = directionWall.unit()
 
         # print(f"angP: {degrees(angP):4.2f}, distP: {distP:4.2f}, distB: {distB:4.2f}, distX: {distX}")
@@ -91,6 +86,16 @@ class Ball:
 
         resetPoint = impactPoint + (unitDirectionPerp * self.radius)
         self.position = resetPoint
+
+    def addForce(self, x=0, y=0):
+        if x:
+            self.acceleration.x = x / self.mass
+
+        if y:
+            weight = self.mass * 9.8
+            resultant_force = y + weight
+
+            self.acceleration.y = resultant_force / self.mass
 
     def update(self, dt):
         self.velocity += self.acceleration * dt
@@ -113,6 +118,4 @@ class Ball:
         for w in walls:
             if self.isTouchingWall(w):
                 self.colour = GREEN
-                self.velocity.x = -self.velocity.x * self.bounce
-                self.velocity.y = -self.velocity.y * self.bounce
                 break

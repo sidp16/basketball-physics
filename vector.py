@@ -53,13 +53,13 @@ class Vector:
         else:
             raise TypeError(f"{other}, found {type(other).__name__}, expected Vector")
 
-    def rotate(self, other, position):
-        if isinstance(other, (int, float)):
-            x2 = cos(other) * position.x - sin(other) * position.y
-            y2 = sin(other) * position.x + cos(other) * position.y
+    def rotate(self, angle):
+        if isinstance(angle, (int, float)):
+            x2 = cos(angle) * self.x - sin(angle) * self.y
+            y2 = sin(angle) * self.x + cos(angle) * self.y
             return Vector(x2,y2)
         else:
-            raise TypeError(f"{other}, found {type(other).__name__}, expected int / float")
+            raise TypeError(f"{angle}, found {type(angle).__name__}, expected int / float")
 
 if __name__ == "__main__":
     point2 = Vector(3,8)
