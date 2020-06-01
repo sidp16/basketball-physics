@@ -32,11 +32,10 @@ class Ball:
         return self.position.x >= DISPLAY_WIDTH - self.radius or self.position.x <= 0 + self.radius
 
 
-    def isTouchingWall(self, wall):
+    def doWallCollision(self, wall):
         length = wall.startPos.distTo(wall.endPos)
         distT = wall.startPos.distTo(self.position)
         distB = wall.endPos.distTo(self.position)
-        directionWall = wall.endPos - wall.startPos
 
         # ( b^2 + c^2 - a^2 ) / (2 * b * c) > cosine rule (angle)
         top = ((distT**2) + (length**2) - (distB**2)) / (2*distT*length)
@@ -48,41 +47,47 @@ class Ball:
         if degrees(angT) <= 90 and degrees(angB) <= 90:
             distP = distT * sin(angT)
             self.colour = ORANGE
-            angle = 180 - self.velocity.angleWith(directionWall)
             if distP <= self.radius:
-                print(f"angle: {degrees(angle)}")
-                self.resetPosition(wall, distB, distP)
-                print(f"beforeR: {self.velocity}")
-                self.velocity = self.velocity.rotate(angle)
-                print(f"afterR: {self.velocity}")
+                self._resetPosition(wall, distB, distP)
+                self._changeVelocity(wall)
                 return True
 
         elif self.position.distTo(wall.startPos) <= self.radius:
             unitDirectionBall =  (self.position - wall.startPos).unit()
             self.position = wall.startPos + (unitDirectionBall * self.radius)
+            self.velocity = - self.velocity
             return True
 
         elif self.position.distTo(wall.endPos) <= self.radius:
             unitDirectionBall =  (self.position - wall.endPos).unit()
             self.position = wall.endPos + (unitDirectionBall * self.radius)
+            self.velocity = - self.velocity
             return True
 
         else:
             self.colour = RED
             return False
 
-    def resetPosition(self, wall, distB, distP):
-        distX = sqrt((distB ** 2) - (distP ** 2)) # pythagoras
+    def _changeVelocity(self, wall):
         directionWall = wall.endPos - wall.startPos
+        if (directionWall.y < 0 and self.velocity.x < 0) or \
+                (directionWall.y > 0 and self.velocity.x > 0) or \
+                (directionWall.x > 0 and self.velocity.y < 0) or \
+                (directionWall.x < 0 and self.velocity.y > 0):
+            directionWall = -directionWall
+        angleWithWall = self.velocity.angleWith(directionWall)
+        self.velocity = -self.velocity.rotate(radians(180) - 2 * angleWithWall) * self.bounce
+
+    def _resetPosition(self, wall, distB, distP):
+        distX = sqrt((distB ** 2) - (distP ** 2)) # pythagoras
+        directionWall = wall.startPos - wall.endPos
         unitDirectionWall = directionWall.unit()
+        unitDirectionPerp = Vector(-unitDirectionWall.y, unitDirectionWall.x)
 
         # print(f"angP: {degrees(angP):4.2f}, distP: {distP:4.2f}, distB: {distB:4.2f}, distX: {distX}")
-
         impactPoint = wall.endPos + (unitDirectionWall * distX)
-        unitDirectionPerp = Vector(-directionWall.y, directionWall.x).unit()
-
         if unitDirectionPerp.angleWith(self.velocity) < radians(90):
-            unitDirectionPerp = unitDirectionPerp * -1
+            unitDirectionPerp = -unitDirectionPerp
 
         resetPoint = impactPoint + (unitDirectionPerp * self.radius)
         self.position = resetPoint
@@ -116,6 +121,7 @@ class Ball:
             self.position.x = min(self.position.x + self.velocity.x * dt, DISPLAY_WIDTH - self.radius)
 
         for w in walls:
-            if self.isTouchingWall(w):
+            if self.doWallCollision(w):
+                print(f"Velocity: {self.velocity}")
                 self.colour = GREEN
                 break

@@ -10,7 +10,7 @@ from gameObjects import walls
 def clearScreen():
     gameDisplay.fill((236,240,241))
 
-basketball = Ball(x=1000, y=680, radius=18, colour=RED, bounciness=0.5**0.5)
+basketball = Ball(x=800, y=680, radius=18, colour=RED, bounciness=0.95)
 clock = pygame.time.Clock()
 pygame.init()
 
@@ -41,6 +41,7 @@ while True:
 
     dt = clock.tick(60) # in ms, e.g 2500ms is 2.5s (diff in time since last iteration)
     factor = 0.75/100
+    # factor = 0.25/100
     basketball.update(dt * factor)
     clearScreen()
     basketball.draw(gameDisplay)

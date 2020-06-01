@@ -1,4 +1,4 @@
-from math import sqrt, acos, sin, cos
+from math import sqrt, acos, sin, cos, radians, atan
 
 
 class Vector:
@@ -7,13 +7,16 @@ class Vector:
         self.y = y
 
     def __repr__(self):
-        return f"{self.x},{self.y}"
+        return f"{self.x:.1f},{self.y:.1f}"
 
     def __add__(self, other):
         if isinstance(other, Vector):
             return Vector(self.x + other.x, self.y + other.y)
         else:
             raise TypeError(f"{other}, found {type(other).__name__}, expected Vector")
+
+    def __neg__(self):
+        return self * -1
 
     def __sub__(self, other):
         if isinstance(other, Vector):
@@ -62,5 +65,7 @@ class Vector:
             raise TypeError(f"{angle}, found {type(angle).__name__}, expected int / float")
 
 if __name__ == "__main__":
-    point2 = Vector(3,8)
-    print(point2 / 3)
+    test = Vector(1,2)
+    # print(test.magnitude())
+    print(test.rotate(radians(90) - atan(2)))
+

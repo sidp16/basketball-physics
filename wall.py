@@ -6,8 +6,8 @@ from vector import Vector
 
 class Wall:
     def __init__(self, startPos, endPos,  colour, width):
-        self.startPos = Vector(*startPos)
-        self.endPos = Vector(*endPos)
+        self.startPos = startPos
+        self.endPos = endPos
         self.colour = colour
         self.width = width
 
