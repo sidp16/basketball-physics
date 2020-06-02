@@ -10,7 +10,7 @@ from gameObjects import walls
 def clearScreen():
     gameDisplay.fill((236,240,241))
 
-basketball = Ball(x=800, y=680, radius=18, colour=RED, bounciness=0.95)
+basketball = Ball(x=800, y=680, radius=18, colour=RED, bounciness=0.5 ** 0.5)
 clock = pygame.time.Clock()
 pygame.init()
 

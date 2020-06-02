@@ -68,4 +68,3 @@ if __name__ == "__main__":
     test = Vector(1,2)
     # print(test.magnitude())
     print(test.rotate(radians(90) - atan(2)))
-

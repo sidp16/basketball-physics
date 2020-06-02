@@ -12,8 +12,6 @@ class Wall:
         self.width = width
 
     def draw(self, window):
-        # start, end = int(self.start), int(self.end)
-
-        pygame.draw.line(window, BLACK, (self.startPos.x, self.startPos.y), (self.endPos.x, self.endPos.y), self.width)
-        pygame.draw.line(window, self.colour, (self.startPos.x, self.startPos.y), (self.endPos.x, self.endPos.y), self.width-10)
+        pygame.draw.line(window, self.colour, (self.startPos.x, self.startPos.y), (self.endPos.x, self.endPos.y), self.width)
+        # pygame.draw.line(window, self.colour, (self.startPos.x, self.startPos.y), (self.endPos.x, self.endPos.y), self.width-10)
 

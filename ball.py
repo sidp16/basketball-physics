@@ -47,7 +47,7 @@ class Ball:
         if degrees(angT) <= 90 and degrees(angB) <= 90:
             distP = distT * sin(angT)
             self.colour = ORANGE
-            if distP <= self.radius:
+            if distP - 0.5*wall.width <= self.radius:
                 self._resetPosition(wall, distB, distP)
                 self._changeVelocity(wall)
                 return True
@@ -89,7 +89,7 @@ class Ball:
         if unitDirectionPerp.angleWith(self.velocity) < radians(90):
             unitDirectionPerp = -unitDirectionPerp
 
-        resetPoint = impactPoint + (unitDirectionPerp * self.radius)
+        resetPoint = impactPoint + (unitDirectionPerp * (self.radius + wall.width/2))
         self.position = resetPoint
 
     def addForce(self, x=0, y=0):
@@ -122,6 +122,5 @@ class Ball:
 
         for w in walls:
             if self.doWallCollision(w):
-                print(f"Velocity: {self.velocity}")
                 self.colour = GREEN
                 break
