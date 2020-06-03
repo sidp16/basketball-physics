@@ -11,7 +11,8 @@ class Wall:
         self.colour = colour
         self.width = width
 
+    def __repr__(self):
+        return f"{self.startPos} -> {self.endPos}"
+
     def draw(self, window):
         pygame.draw.line(window, self.colour, (self.startPos.x, self.startPos.y), (self.endPos.x, self.endPos.y), self.width)
-        # pygame.draw.line(window, self.colour, (self.startPos.x, self.startPos.y), (self.endPos.x, self.endPos.y), self.width-10)
-

@@ -36,17 +36,17 @@ class Ball:
         length = wall.startPos.distTo(wall.endPos)
         distT = wall.startPos.distTo(self.position)
         distB = wall.endPos.distTo(self.position)
-
         # ( b^2 + c^2 - a^2 ) / (2 * b * c) > cosine rule (angle)
         top = ((distT**2) + (length**2) - (distB**2)) / (2*distT*length)
         bottom = ((distB**2) + (length**2) - (distT**2)) / (2*distB*length)
-
-        angT = acos(top)
-        angB = acos(bottom)
+        try:
+            angT = acos(top)
+            angB = acos(bottom)
+        except:
+            return False
 
         if degrees(angT) <= 90 and degrees(angB) <= 90:
             distP = distT * sin(angT)
-            self.colour = ORANGE
             if distP - 0.5*wall.width <= self.radius:
                 self._resetPosition(wall, distB, distP)
                 self._changeVelocity(wall)

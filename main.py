@@ -10,7 +10,7 @@ from gameObjects import walls
 def clearScreen():
     gameDisplay.fill((236,240,241))
 
-basketball = Ball(x=800, y=680, radius=18, colour=RED, bounciness=0.5 ** 0.5)
+basketball = Ball(x=800, y=680, radius=20, colour=RED, bounciness=0.5 ** 0.5)
 clock = pygame.time.Clock()
 pygame.init()
 
@@ -21,6 +21,8 @@ clearScreen()
 basketball.draw(gameDisplay)
 for w in walls:
     w.draw(gameDisplay)
+
+
 
 while True:
     for event in pygame.event.get():
